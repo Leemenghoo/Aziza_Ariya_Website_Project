@@ -26,6 +26,12 @@ class PlayController {
         this.elapsedTime = 0;
         this.moves = 0;
 
+        this.hintUses = 0;
+        this.maxHintUses = 5;
+        this.hintCooldownMs = 6000;
+        this.hintCooldownUntil = 0;
+        this.hintCooldownTimer = null;
+
         this.init();
     }
 
@@ -115,6 +121,13 @@ class PlayController {
 
     initGameControls() {
         const checkBtn = document.getElementById('check-btn');
+        const hintBtn = document.getElementById('hint-btn');
+
+        if (hintBtn) {
+            hintBtn.addEventListener('click', async () => {
+                await this.handleHint();
+            });
+        }
 
         checkBtn.addEventListener('click', () => {
             console.log("Check Result clicked");
@@ -147,6 +160,94 @@ class PlayController {
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
+
+        this.updateHintButtonState();
+    }
+
+    getHintPieceCount() {
+        if (this.config.difficulty === 'easy') return 3;
+        if (this.config.difficulty === 'medium') return Math.random() > 0.5 ? 2 : 3;
+        if (this.config.difficulty === 'hard') return Math.random() > 0.5 ? 1 : 2;
+        return 1;
+    }
+
+    updateHintButtonState() {
+        const hintBtn = document.getElementById('hint-btn');
+        if (!hintBtn) return;
+
+        const now = Date.now();
+        const isCoolingDown = now < this.hintCooldownUntil;
+        const noUsesLeft = this.hintUses >= this.maxHintUses;
+        const engineBlocked = !this.engine || this.engine.isSolved || this.currentStep !== 3;
+
+        hintBtn.disabled = isCoolingDown || noUsesLeft || engineBlocked;
+        hintBtn.classList.toggle('is-cooldown', isCoolingDown);
+        hintBtn.classList.toggle('hint-used', this.hintUses > 0);
+
+        if (engineBlocked && this.engine?.isSolved) {
+            hintBtn.textContent = 'Solved';
+            return;
+        }
+
+        if (noUsesLeft) {
+            hintBtn.textContent = 'Hint (0 left)';
+            return;
+        }
+
+        if (isCoolingDown) {
+            const secs = Math.max(1, Math.ceil((this.hintCooldownUntil - now) / 1000));
+            hintBtn.textContent = `Hint (${secs}s)`;
+            return;
+        }
+
+        hintBtn.textContent = `Hint (${this.maxHintUses - this.hintUses} left)`;
+    }
+
+    startHintCooldown() {
+        if (this.hintCooldownTimer) clearInterval(this.hintCooldownTimer);
+        this.hintCooldownUntil = Date.now() + this.hintCooldownMs;
+        this.updateHintButtonState();
+
+        this.hintCooldownTimer = setInterval(() => {
+            if (Date.now() >= this.hintCooldownUntil) {
+                clearInterval(this.hintCooldownTimer);
+                this.hintCooldownTimer = null;
+                this.hintCooldownUntil = 0;
+            }
+            this.updateHintButtonState();
+        }, 250);
+    }
+
+    async handleHint() {
+        if (!this.engine || this.engine.isSolved || this.currentStep !== 3) {
+            this.updateHintButtonState();
+            return;
+        }
+
+        if (this.hintUses >= this.maxHintUses) {
+            this.updateHintButtonState();
+            return;
+        }
+
+        if (Date.now() < this.hintCooldownUntil) {
+            this.updateHintButtonState();
+            return;
+        }
+
+        const hintBtn = document.getElementById('hint-btn');
+        if (hintBtn) hintBtn.disabled = true;
+
+        const count = this.getHintPieceCount();
+        const result = await this.engine.applyHint(count);
+
+        if (result.applied > 0) {
+            this.hintUses += 1;
+            this.moves += result.applied;
+            document.getElementById('move-count').textContent = this.moves;
+            this.startHintCooldown();
+        }
+
+        this.updateHintButtonState();
     }
 
     goToStep(step) {
@@ -160,6 +261,8 @@ class PlayController {
             else if (i + 1 === step) dot.className = 'step-dot active';
             else dot.className = 'step-dot';
         });
+
+        this.updateHintButtonState();
 
         window.scrollTo(0, 0);
     }
@@ -202,9 +305,16 @@ class PlayController {
         this.engine.init();
         
         this.moves = 0;
+        this.hintUses = 0;
+        this.hintCooldownUntil = 0;
+        if (this.hintCooldownTimer) {
+            clearInterval(this.hintCooldownTimer);
+            this.hintCooldownTimer = null;
+        }
         this.elapsedTime = 0;
         this.startTime = Date.now();
         document.getElementById('move-count').textContent = '0';
+        this.updateHintButtonState();
         
         if (this.timer) clearInterval(this.timer);
         this.timer = setInterval(() => {
@@ -217,6 +327,7 @@ class PlayController {
 
     handleComplete() {
         clearInterval(this.timer);
+        this.updateHintButtonState();
         setTimeout(() => {
             this.goToStep(4);
             this.showCelebration();

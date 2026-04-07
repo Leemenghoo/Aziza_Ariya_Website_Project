@@ -18,6 +18,8 @@ class PuzzleEngine {
         this.pieces = [];
         this.selectedGroup = [];
         this.isSolved = false;
+        this.hintInProgress = false;
+        this.hintedPieceIds = new Set();
         
         this.onComplete = options.onComplete || (() => {});
         this.onMove = options.onMove || (() => {});
@@ -157,9 +159,18 @@ class PuzzleEngine {
         ctx.translate(p.x + p.width/2, p.y + p.height/2);
         ctx.rotate(p.rotation);
         this.drawPiecePath(ctx, -p.width/2, -p.height/2, p.width, p.height, p.tabs, tabSize);
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
+        const hasHintGlow = p.hintUntil && Date.now() < p.hintUntil;
+        ctx.strokeStyle = hasHintGlow ? '#111' : '#000';
+        ctx.lineWidth = hasHintGlow ? 3 : 2;
         ctx.stroke();
+
+        if (hasHintGlow) {
+            ctx.save();
+            ctx.globalAlpha = 0.22;
+            ctx.fillStyle = '#000';
+            ctx.fill();
+            ctx.restore();
+        }
         ctx.restore();
     }
 
@@ -331,6 +342,107 @@ class PuzzleEngine {
             return true;
         }
         return false;
+    }
+
+    isPieceCorrect(p) {
+        const rotNorm = Math.abs(p.rotation % (Math.PI * 2));
+        const isRotationCorrect = rotNorm < 0.08 || rotNorm > Math.PI * 2 - 0.08;
+        const isPositionCorrect = Math.hypot(p.x - p.targetX, p.y - p.targetY) < 4;
+        return isPositionCorrect && isRotationCorrect;
+    }
+
+    getHintCandidatePieces() {
+        return this.pieces.filter(p => !this.isPieceCorrect(p) && !this.hintedPieceIds.has(p.id));
+    }
+
+    getHintCount() {
+        const candidates = this.getHintCandidatePieces();
+        if (!candidates.length) return 0;
+
+        if (this.difficulty === 'easy') {
+            return Math.min(candidates.length, 3);
+        }
+        if (this.difficulty === 'medium') {
+            return Math.min(candidates.length, 2 + Math.floor(Math.random() * 2));
+        }
+        return Math.min(candidates.length, 1 + Math.floor(Math.random() * 2));
+    }
+
+    pickHintPieces(count) {
+        const candidates = this.getHintCandidatePieces();
+        const shuffled = [...candidates].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, count);
+    }
+
+    animatePiecesToTarget(pieces, duration = 380) {
+        return new Promise((resolve) => {
+            if (!pieces.length) {
+                resolve();
+                return;
+            }
+
+            const start = performance.now();
+            const initial = pieces.map(p => ({ piece: p, x: p.x, y: p.y, r: p.rotation }));
+
+            const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+            const tick = (now) => {
+                const t = Math.min(1, (now - start) / duration);
+                const eased = easeOutCubic(t);
+
+                initial.forEach(({ piece, x, y, r }) => {
+                    piece.x = x + (piece.targetX - x) * eased;
+                    piece.y = y + (piece.targetY - y) * eased;
+                    piece.rotation = r * (1 - eased);
+                });
+
+                this.draw();
+
+                if (t < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    resolve();
+                }
+            };
+
+            requestAnimationFrame(tick);
+        });
+    }
+
+    async applyHint(requestedCount = null) {
+        if (this.isSolved || this.hintInProgress) {
+            return { applied: 0, solved: this.isSolved, reason: 'blocked' };
+        }
+
+        const count = requestedCount ?? this.getHintCount();
+        if (count <= 0) {
+            return { applied: 0, solved: this.isSolved, reason: 'no-candidates' };
+        }
+
+        const piecesToHint = this.pickHintPieces(count);
+        if (!piecesToHint.length) {
+            return { applied: 0, solved: this.isSolved, reason: 'no-candidates' };
+        }
+
+        this.hintInProgress = true;
+        await this.animatePiecesToTarget(piecesToHint);
+
+        const now = Date.now();
+        piecesToHint.forEach((p) => {
+            p.x = p.targetX;
+            p.y = p.targetY;
+            p.rotation = 0;
+            p.isPlaced = true;
+            p.hintUntil = now + 520;
+            this.hintedPieceIds.add(p.id);
+        });
+
+        this.selectedGroup = [];
+        this.checkSolve();
+        this.draw();
+
+        this.hintInProgress = false;
+        return { applied: piecesToHint.length, solved: this.isSolved, reason: 'ok' };
     }
 
     forceSolve() {

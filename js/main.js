@@ -34,7 +34,7 @@ function initNavigation() {
 
 function initRevealAnimations() {
     const revealElements = document.querySelectorAll('.reveal');
-    
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -56,7 +56,7 @@ function initRevealAnimations() {
 function triggerCelebration() {
     const colors = ['#000000']; // Strictly black per prompt
     const count = 50;
-    
+
     for (let i = 0; i < count; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti-piece';
@@ -66,9 +66,9 @@ function triggerCelebration() {
         confetti.style.height = (Math.random() * 8 + 4) + 'px';
         confetti.style.animationDuration = (Math.random() * 1 + 1) + 's';
         confetti.style.animationDelay = (Math.random() * 0.5) + 's';
-        
+
         document.body.appendChild(confetti);
-        
+
         // Remove after animation
         setTimeout(() => confetti.remove(), 2000);
     }
