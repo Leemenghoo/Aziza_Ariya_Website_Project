@@ -1,0 +1,788 @@
+/* ============================================================
+   Ariya — Sketch Aesthetic CSS Design System
+   Colors: #f9f9ee (bg) + #000 (everything)
+   Fonts: Caveat (headings), Patrick Hand (body)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&display=swap');
+
+/* ─── Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Root tokens ─── */
+:root {
+  --bg: #f9f9ee;
+  --ink: #000000;
+  --font-head: 'Caveat', cursive;
+  --font-body: 'Patrick Hand', cursive;
+  --border: 2px solid var(--ink);
+  --border-thick: 3px solid var(--ink);
+  --shadow: 3px 3px 0 var(--ink);
+  --shadow-sm: 2px 2px 0 var(--ink);
+  --radius: 0px; /* Hand-drawn = no border-radius */
+  --transition: 0.18s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 700; }
+h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 600; }
+h3 { font-size: clamp(1.3rem, 3vw, 2rem); font-weight: 600; }
+h4 { font-size: 1.2rem; }
+p  { font-size: 1.05rem; }
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ─── Nav ─── */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: var(--border-thick);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo {
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: rotate(-1deg);
+}
+.nav-logo .logo-icon {
+  width: 32px;
+  height: 32px;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  text-decoration: none;
+  position: relative;
+  transition: var(--transition);
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background: var(--ink);
+  transition: width var(--transition);
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { width: 100%; }
+.nav-links a.active { font-weight: 600; }
+
+/* Hamburger */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--ink);
+  transition: var(--transition);
+}
+
+/* ─── Sketch Button ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.6rem;
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: #ffffff;
+  color: var(--ink);
+  border: var(--border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  transform: rotate(-0.5deg);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.btn:hover {
+  transform: rotate(0.5deg) translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+  background: #fdfdfd;
+}
+.btn-primary {
+  background: var(--ink);
+  color: #fff;
+  border: var(--border-thick);
+  box-shadow: var(--shadow);
+}
+.btn-primary:hover {
+  background: #333;
+}
+.btn:active {
+  transform: rotate(0deg) translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.btn-outline {
+  background: var(--bg);
+  color: var(--ink);
+}
+.btn-outline:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+.btn-sm {
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+}
+.btn-lg {
+  padding: 0.9rem 2.2rem;
+  font-size: 1.4rem;
+}
+
+/* ─── Sketch Card ─── */
+.card {
+  border: var(--border-thick);
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  padding: 1.2rem;
+  position: relative;
+  transform: rotate(-0.3deg);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.card:hover {
+  transform: rotate(0.3deg) translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.card-alt { transform: rotate(0.4deg); }
+.card-alt:hover { transform: rotate(-0.4deg) translate(-2px, -2px); }
+
+/* ─── Sketch Divider ─── */
+.divider {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.divider svg {
+  display: block;
+  width: 100%;
+}
+
+/* ─── Section ─── */
+.section {
+  padding: 4rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-wide {
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: var(--border-thick);
+}
+.hero-title {
+  animation: drawIn 0.8s ease both;
+}
+.hero-tagline {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  margin: 1rem 0 2rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.4s ease both;
+  max-width: 540px;
+}
+.hero-cta {
+  opacity: 0;
+  animation: fadeUp 0.6s 0.6s ease both;
+}
+
+/* ─── How It Works ─── */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.how-step {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  transform: rotate(-0.5deg);
+  transition: transform var(--transition);
+}
+.how-step:nth-child(2) { transform: rotate(0.3deg); }
+.how-step:nth-child(3) { transform: rotate(-0.2deg); }
+.how-step:hover { transform: rotate(0deg) scale(1.02); }
+.how-step svg { margin-bottom: 0.8rem; }
+.how-step h3 { margin-bottom: 0.4rem; }
+
+/* ─── Illustrations ─── */
+.illo {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.illo-tl { top: 20px; left: 20px; width: clamp(80px, 12vw, 180px); }
+.illo-tr { top: 20px; right: 20px; width: clamp(60px, 10vw, 140px); }
+.illo-bl { bottom: 20px; left: 20px; width: clamp(60px, 10vw, 140px); }
+.illo-br { bottom: 20px; right: 20px; width: clamp(80px, 12vw, 160px); }
+.illo-mid-l { left: 10px; top: 50%; transform: translateY(-50%); width: clamp(40px, 6vw, 90px); }
+
+/* ─── Upload Zone ─── */
+.upload-zone {
+  border: 3px dashed var(--ink);
+  background: var(--bg);
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  background: rgba(0,0,0,0.04);
+  transform: scale(1.01);
+}
+.upload-zone input { display: none; }
+.upload-icon { width: 64px; height: 64px; margin: 0 auto 1rem; }
+.upload-zone h3 { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.upload-zone p { font-size: 0.95rem; opacity: 0.7; }
+
+/* ─── Grid Size Selector ─── */
+.grid-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+.grid-option {
+  border: var(--border);
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  font-family: var(--font-head);
+  font-size: 1rem;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg);
+  transform: rotate(-0.5deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 80px;
+}
+.grid-option:hover, .grid-option.selected {
+  background: rgba(0,0,0,0.05);
+  border-width: 3px;
+  transform: scale(1.02) rotate(0deg);
+}
+.grid-option svg { display: block; }
+
+/* ─── Shape Selector ─── */
+.shape-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+.shape-option {
+  border: var(--border);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-family: var(--font-head);
+  font-size: 1rem;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: rotate(0.3deg);
+}
+.shape-option:hover, .shape-option.selected {
+  background: rgba(0,0,0,0.05);
+  border-width: 3px;
+  transform: scale(1.02) rotate(0deg);
+}
+.shape-option svg path, .shape-option svg rect, .shape-option svg polygon {
+  transition: fill var(--transition);
+}
+.shape-option.selected svg path,
+.shape-option.selected svg rect,
+.shape-option.selected svg polygon { fill: var(--bg); stroke: var(--bg); }
+
+/* ─── Difficulty Selector ─── */
+.difficulty-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+.difficulty-option {
+  border: var(--border);
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg);
+  transform: rotate(-0.3deg);
+}
+.difficulty-option:hover, .difficulty-option.selected {
+  background: rgba(0,0,0,0.06);
+  border-width: 3px;
+  transform: scale(1.03) rotate(0deg);
+}
+
+/* ─── Config Section ─── */
+.config-block {
+  margin-bottom: 2rem;
+}
+.config-block label {
+  font-family: var(--font-head);
+  font-size: 1.3rem;
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+/* ─── Play Step Panels ─── */
+.play-step {
+  display: none;
+  animation: fadeUp 0.4s ease both;
+}
+.play-step.active { display: block; }
+
+/* ─── Puzzle Canvas Area ─── */
+#puzzle-container {
+  position: relative;
+  width: 90vw;
+  height: 80vh;
+  margin: 0 auto;
+  touch-action: none;
+  overflow: hidden;
+  border: var(--border-thick);
+  box-shadow: var(--shadow);
+  background: rgba(0,0,0,0.04);
+}
+
+#puzzle-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+#puzzle-canvas:active { cursor: grabbing; }
+
+/* ─── HUD ─── */
+.hud {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.hud-item {
+  font-family: var(--font-head);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hud-item span { font-weight: 700; }
+
+/* ─── Reference thumbnail ─── */
+#ref-thumb {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 140px;
+  border: var(--border-thick);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  z-index: 30;
+  background: var(--bg);
+  transition: width var(--transition);
+}
+#ref-thumb:hover { width: 220px; }
+
+
+/* ─── Frame Selector ─── */
+.frame-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.frame-option {
+  border: var(--border);
+  padding: 0.5rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+  text-align: center;
+  transform: rotate(-0.3deg);
+}
+.frame-option:hover, .frame-option.selected {
+  box-shadow: var(--shadow);
+  transform: rotate(0.3deg) translate(-2px, -2px);
+}
+.frame-option.selected { border-width: 3px; }
+.frame-option img, .frame-option svg { width: 100%; height: 80px; object-fit: contain; }
+.frame-option p { font-family: var(--font-head); font-size: 0.95rem; margin-top: 0.3rem; }
+
+/* ─── Completion Screen ─── */
+#completion-screen {
+  text-align: center;
+  padding: 2rem;
+}
+.completion-canvas-wrap {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  border: var(--border-thick);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+#final-canvas { width: 100%; display: block; }
+
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.stat-box {
+  border: var(--border);
+  padding: 0.8rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-head);
+  text-align: center;
+}
+.stat-box .stat-val {
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+}
+.stat-box .stat-label {
+  font-size: 0.95rem;
+}
+
+/* ─── Confetti ─── */
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--ink);
+  pointer-events: none;
+  z-index: 999;
+  border-radius: 0;
+  animation: confettiFall 1.5s ease-out both;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ─── Gallery ─── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.gallery-card {
+  border: var(--border-thick);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transform: rotate(-0.4deg);
+  transition: transform var(--transition), box-shadow var(--transition);
+  background: var(--bg);
+}
+.gallery-card:nth-child(even) { transform: rotate(0.4deg); }
+.gallery-card:hover {
+  transform: rotate(0deg) translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.gallery-card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  border-bottom: var(--border);
+}
+.gallery-card-body { padding: 0.8rem 1rem; }
+.gallery-card-body h4 { font-size: 1.2rem; margin-bottom: 0.3rem; }
+.gallery-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+.badge {
+  border: var(--border);
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+  font-family: var(--font-head);
+}
+
+/* ─── About ─── */
+.about-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.about-content p { margin-bottom: 1.2rem; }
+
+/* ─── Page header band ─── */
+.page-header {
+  border-bottom: var(--border-thick);
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-header h1 { animation: drawIn 0.7s ease both; }
+.page-header p { margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.8; }
+
+/* ─── Footer ─── */
+footer {
+  padding: 3rem 1rem;
+  margin-top: 4rem;
+  border-top: var(--border-thick);
+  background: var(--bg);
+}
+.footer-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.social-links {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+.social-links a {
+  color: var(--ink);
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+}
+.social-links a:hover {
+  transform: translateY(-3px) rotate(3deg);
+  color: #555;
+}
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+footer p { opacity: 0.7; font-family: var(--font-head); font-size: 1.1rem; }
+
+/* ─── Animations ─── */
+@keyframes drawIn {
+  0%   { opacity: 0; transform: scaleX(0.95) skewX(-2deg); }
+  100% { opacity: 1; transform: scaleX(1)    skewX(0deg); }
+}
+@keyframes fadeUp {
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(-1.5deg); }
+  75%       { transform: rotate(1.5deg); }
+}
+@keyframes popIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.anim-fadeup { animation: fadeUp 0.6s ease both; }
+.anim-popin  { animation: popIn  0.5s ease both; }
+.anim-wobble { animation: wobble 2s ease infinite; }
+
+/* ─── Scroll animation ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Progress bar ─── */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  border: var(--border);
+  background: var(--bg);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--ink);
+  transition: width 0.4s ease;
+}
+
+/* ─── Step indicator ─── */
+.step-indicator {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border: var(--border-thick);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.step-dot {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0.3rem;
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  border-right: var(--border);
+  transition: all var(--transition);
+  cursor: default;
+}
+.step-dot:last-child { border-right: none; }
+.step-dot.done { background: rgba(0,0,0,0.06); }
+.step-dot.active { background: var(--ink); color: var(--bg); }
+
+/* ─── Scrambled preview ─── */
+#preview-container {
+  position: relative;
+  width: 100%;
+  border: var(--border-thick);
+  box-shadow: var(--shadow);
+  min-height: 360px;
+  overflow: hidden;
+  touch-action: none;
+}
+#preview-canvas {
+  display: block;
+  width: 100%;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-bottom: var(--border-thick);
+    padding: 1rem 2rem;
+    z-index: 99;
+  }
+  .nav-links.open { display: flex; }
+  .nav-toggle { display: flex; }
+  .hud { gap: 0.8rem; }
+  .stats-row { gap: 1.5rem; }
+  #ref-thumb { width: 80px; }
+  .section, .section-wide { padding: 2.5rem 1rem; }
+  .hero { padding: 2rem 1rem; min-height: 70vh; }
+  .illo-tl, .illo-tr, .illo-bl, .illo-br { width: 60px; opacity: 0.5; }
+}
+
+/* ─── Utility ─── */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.rotate-m1 { transform: rotate(-1deg); }
+.rotate-p1 { transform: rotate(1deg); }
+/* ─── Animations ─── */
+@keyframes wobble {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-1deg); }
+  75% { transform: translateX(5px) rotate(1deg); }
+  100% { transform: translateX(0); }
+}
+.wobble { animation: wobble 0.4s ease; }
+
+.confetti-piece {
+  position: fixed;
+  top: -20px;
+  width: 10px;
+  height: 10px;
+  z-index: 10000;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}

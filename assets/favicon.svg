@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" fill="#f9f9ee"/>
+  <!-- Puzzle piece shape -->
+  <path d="M6 6 L14 6 Q14 2 18 6 L26 6 L26 14 Q30 14 26 18 L26 26 L18 26 Q18 30 14 26 L6 26 L6 18 Q2 18 6 14 Z"
+    fill="#f9f9ee" stroke="#000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play | Ariya</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">
+            <img src="assets/favicon.svg" alt="" class="logo-icon">
+            Ariya
+        </a>
+        <button class="nav-toggle">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="play.html" class="active">Play</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <main class="section-wide">
+        
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step-dot active">1. Source</div>
+            <div class="step-dot">2. Preview</div>
+            <div class="step-dot">3. Solve</div>
+            <div class="step-dot">4. Frame</div>
+        </div>
+
+        <!-- STEP 1: UPLOAD & CONFIGURE -->
+        <div id="step-1" class="play-step active">
+            <h2 class="mb-2">Upload your photo</h2>
+            <div class="upload-zone" id="upload-zone">
+                <input type="file" id="image-input" accept="image/*">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
+                        <path d="M4 12V20H20V12 M12 4V16 M8 8L12 4L16 8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3>Drag & Drop or Click</h3>
+                <p>JPG, PNG, WEBP (Max 10MB)</p>
+            </div>
+
+            <div class="mt-3 grid-2">
+                <div class="config-block">
+                    <label>Grid Size</label>
+                    <div class="grid-options">
+                        <div class="grid-option selected" data-grid="4x4">
+                            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" stroke="currentColor" fill="none"/></svg>
+                            4×4
+                        </div>
+                        <div class="grid-option" data-grid="8x8">
+                             <svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h4v4H3zM8 3h4v4h-4zM13 3h4v4h-4zM18 3h4v4h-4z" stroke="currentColor" fill="none"/></svg>
+                             8×8
+                        </div>
+                        <div class="grid-option" data-grid="12x12">
+                            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h3v3H3zM7 3h3v3H7zM11 3h3v3H11zM15 3h3v3H15z" stroke="currentColor" fill="none"/></svg>
+                            12×12
+                        </div>
+                        <div class="grid-option" data-grid="24x24">
+                            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h2v2H3zM6 3h2v2H6zM9 3h2v2H9zM12 3h2v2H12z" stroke="currentColor" fill="none"/></svg>
+                            24×24
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-block">
+                    <label>Piece Shape</label>
+                    <div class="shape-options">
+                        <div class="shape-option selected" data-shape="jigsaw">
+                            <svg width="20" height="20" viewBox="0 0 32 32"><path d="M6 6 L14 6 Q14 2 18 6 L26 6 L26 14 Q30 14 26 18 L26 26 L18 26 Q18 30 14 26 L6 26 L6 18 Q2 18 6 14 Z" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+                            Jigsaw
+                        </div>
+                        <div class="shape-option" data-shape="grid">
+                             <svg width="20" height="20" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+                             Square
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-block mt-1">
+                <label>Difficulty</label>
+                <div class="difficulty-options">
+                    <div class="difficulty-option selected" data-diff="easy">Easy</div>
+                    <div class="difficulty-option" data-diff="medium">Medium</div>
+                    <div class="difficulty-option" data-diff="hard">Hard</div>
+                    <div class="difficulty-option" data-diff="expert">Expert</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: SCRAMBLED PREVIEW -->
+        <div id="step-2" class="play-step">
+            <h2 class="mb-2">Mixed & Ready</h2>
+            <div id="preview-container">
+                <!-- Engine will render preview here -->
+            </div>
+            <div class="mt-2 text-center">
+                <button class="btn btn-primary btn-lg" id="start-solving-btn">Start Solving</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: PUZZLE SOLVING -->
+        <div id="step-3" class="play-step">
+            <div class="hud">
+                <div class="hud-item">Time: <span id="timer-val">0:00</span></div>
+                <div class="hud-item">Moves: <span id="move-count">0</span></div>
+                <button class="btn btn-sm btn-outline" id="check-btn">Check Result</button>
+            </div>
+            
+            <div id="puzzle-container">
+                <!-- Engine will render active puzzle here -->
+                <img id="ref-thumb" alt="Reference">
+            </div>
+        </div>
+
+        <!-- STEP 4: COMPLETION & FRAMING -->
+        <div id="step-4" class="play-step">
+            <div id="completion-screen">
+                <h1 class="anim-popin">Masterpiece Complete!</h1>
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <span class="stat-label">Total Time</span>
+                        <span class="stat-val" id="final-time">0:00</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Moves</span>
+                        <span class="stat-val" id="final-moves">0</span>
+                    </div>
+                </div>
+
+                <div class="completion-canvas-wrap">
+                    <canvas id="final-canvas"></canvas>
+                </div>
+
+                <div class="config-block">
+                    <label>Pick a frame</label>
+                    <div class="frame-grid">
+                        <div class="frame-option selected" data-frame="none">
+                            <div class="flex-center" style="height:80px; border:1px dashed #ccc">None</div>
+                            <p>Clean Cut</p>
+                        </div>
+                        <div class="frame-option" data-frame="classic">
+                            <div style="height:80px; border:8px solid black; box-shadow: inset 0 0 0 2px white"></div>
+                            <p>Classic Matte</p>
+                        </div>
+                        <div class="frame-option" data-frame="ornate">
+                            <div class="flex-center" style="height:80px; font-weight:bold; font-size:2rem">♔</div>
+                            <p>Royal Ornate</p>
+                        </div>
+                        <div class="frame-option" data-frame="woodcut">
+                            <div style="height:80px; border:10px double black"></div>
+                            <p>Rustic Wood</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button class="btn btn-lg" id="download-btn">Download Final Image</button>
+                    <a href="play.html" class="btn btn-lg btn-outline">New Puzzle</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Ariya. Hand-drawn with care.</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/nou.wangyi" target="_blank" aria-label="Facebook">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a href="https://www.tiktok.com/@min202303" target="_blank" aria-label="TikTok">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/puzzle-engine.js"></script>
+    <script src="js/play.js"></script>
+</body>
+</html>
