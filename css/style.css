@@ -1042,8 +1042,9 @@ a {
   box-shadow: var(--shadow);
   overflow: hidden;
   transform: rotate(-0.4deg);
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform 0.24s ease, box-shadow 0.24s ease, background-color 0.24s ease;
   background: var(--bg);
+  cursor: pointer;
 }
 
 .gallery-card:nth-child(even) {
@@ -1053,37 +1054,46 @@ a {
 .gallery-card:hover {
   transform: rotate(0deg) translate(-3px, -3px);
   box-shadow: 6px 6px 0 var(--ink);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .gallery-card-img {
   width: 100%;
-  aspect-ratio: 1;
+  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  object-position: center 5%;
   display: block;
   border-bottom: var(--border);
 }
 
 .gallery-card-body {
-  padding: 0.8rem 1rem;
+  padding: 1rem;
 }
 
-.gallery-card-body h4 {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  margin-bottom: 0.3rem;
+.artwork-title {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-head);
+  letter-spacing: -0.3px;
+}
+
+.artist-credit {
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  font-style: italic;
+  color: var(--ink);
+  margin: 0;
+  opacity: 0.8;
+  font-family: var(--font-body);
 }
 
 .gallery-badges {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
+  display: none;
 }
 
 .badge {
-  border: var(--border);
-  padding: 0.12rem 0.4rem;
-  font-size: 0.75rem;
-  font-family: var(--font-head);
+  display: none;
 }
 
 /* ─── About ─── */

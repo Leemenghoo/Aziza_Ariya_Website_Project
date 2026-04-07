@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" fill="#f9f9ee"/>
-  <!-- Puzzle piece shape -->
-  <path d="M6 6 L14 6 Q14 2 18 6 L26 6 L26 14 Q30 14 26 18 L26 26 L18 26 Q18 30 14 26 L6 26 L6 18 Q2 18 6 14 Z"
-    fill="#f9f9ee" stroke="#000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Ariya Puzzle Mark</title>
+  <desc id="logoDesc">Minimal puzzle-piece logo with smooth curves in solid black.</desc>
+  <path
+    fill="#000"
+    d="M28 30H50c2.2 0 4-1.8 4-4a10 10 0 1 1 20 0c0 2.2 1.8 4 4 4h22c4.4 0 8 3.6 8 8v18c0 2.2-1.8 4-4 4a10 10 0 1 0 0 20c2.2 0 4 1.8 4 4v18c0 4.4-3.6 8-8 8H78c-2.2 0-4 1.8-4 4a10 10 0 1 1-20 0c0-2.2-1.8-4-4-4H28c-4.4 0-8-3.6-8-8V84c0-2.2 1.8-4 4-4a10 10 0 1 0 0-20c-2.2 0-4-1.8-4-4V38c0-4.4 3.6-8 8-8Z"/>
 </svg>
